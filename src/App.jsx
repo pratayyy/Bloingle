@@ -1,7 +1,9 @@
+import Navbar from "./components/Navbar";
+
 const App = () => {
   return (
     <>
-      <h1>Blog Website!</h1>
+      <Navbar />
     </>
   );
 };
