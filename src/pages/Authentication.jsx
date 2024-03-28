@@ -8,6 +8,7 @@ import InputBox from "../components/InputBox";
 import googleIcon from "../images/google.png";
 import AnimationWrapper from "../common/AnimationWrapper";
 import { storeInSession } from "../common/Session";
+import { authWithGoogle } from "../common/Firebase";
 
 const Authentication = ({ type }) => {
   const {
@@ -31,6 +32,23 @@ const Authentication = ({ type }) => {
         toast.success(
           type === "login" ? "Logged in successfully" : "Signed Up successfully"
         );
+    } catch (err) {
+      toast.error(err.response.data.message);
+    }
+  };
+
+  const handleGoogleAuth = async (e) => {
+    e.preventDefault();
+
+    try {
+      const user = await authWithGoogle();
+
+      const serverRoute = "/api/v1/users/google-auth";
+      const formData = {
+        token: user.accessToken,
+      };
+
+      userAuthThroughServer(serverRoute, formData);
     } catch (err) {
       toast.error(err.response.data.message);
     }
@@ -102,7 +120,10 @@ const Authentication = ({ type }) => {
             <hr className="w-1/2 border-black" />
           </div>
 
-          <button className="btn-dark flex items-center justify-center gap-4 w-[90%] center">
+          <button
+            className="btn-dark flex items-center justify-center gap-4 w-[90%] center"
+            onClick={handleGoogleAuth}
+          >
             <img src={googleIcon} className="w-5" />
             continue with google
           </button>
