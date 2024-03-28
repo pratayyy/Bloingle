@@ -1,22 +1,63 @@
 import { Link } from "react-router-dom";
+import { Toaster, toast } from "react-hot-toast";
+import axios from "axios";
+
 import InputBox from "../components/InputBox";
 import googleIcon from "../images/google.png";
 import AnimationWrapper from "../common/AnimationWrapper";
+import { storeInSession } from "../common/Session";
 
 const Authentication = ({ type }) => {
+  const userAuthThroughServer = async (serverRoute, formData) => {
+    try {
+      const res = await axios({
+        method: "POST",
+        url: import.meta.env.VITE_SERVER_DOMAIN + serverRoute,
+        data: formData,
+      });
+
+      storeInSession("user", JSON.stringify(res.data));
+      console.log(sessionStorage);
+
+      if (res.data.status === "success")
+        toast.success(
+          type === "login" ? "Logged in successfully" : "Signed Up successfully"
+        );
+    } catch (err) {
+      toast.error(err.response.data.message);
+    }
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const serverRoute =
+      type === "login" ? "/api/v1/users/login" : "/api/v1/users/signup";
+
+    const form = new FormData(document.getElementById("form_authentication"));
+    const formData = {};
+
+    for (let [key, value] of form.entries()) {
+      formData[key] = value;
+    }
+
+    userAuthThroughServer(serverRoute, formData);
+  };
+
   return (
     <AnimationWrapper keyValue={type}>
       <section className="h-cover flex items-center justify-center">
-        <form className="w-[80%] max-w-[400px]">
+        <Toaster />
+        <form id="form_authentication" className="w-[80%] max-w-[400px]">
           <h1 className="text-4xl font-gelasio capitalize text-center mb-24">
             {type === "login" ? "Welcome back!" : "Join us today!"}
           </h1>
 
           {type !== "login" ? (
             <InputBox
-              name="fullname"
+              name="name"
               type="text"
-              placeholder="Full Name"
+              placeholder="Name"
               icon="fi-rr-user"
             />
           ) : (
@@ -37,7 +78,11 @@ const Authentication = ({ type }) => {
             icon="fi-rr-key"
           />
 
-          <button className="btn-dark center mt-14" type="submit">
+          <button
+            className="btn-dark center mt-14"
+            type="submit"
+            onClick={handleSubmit}
+          >
             {type.replace("-", " ")}
           </button>
 
