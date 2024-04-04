@@ -1,13 +1,34 @@
+import { useRef } from "react";
 import { Link } from "react-router-dom";
+import { Toaster, toast } from "react-hot-toast";
 
 import logo from "../images/blongle-icon.png";
 import blogBanner from "../images/blog-banner.png";
 import AnimationWrapper from "../common/AnimationWrapper";
+import { uploadImage } from "../common/Aws";
 
 const BlogEditor = () => {
-  const handleBannerUpload = (e) => {
+  const blogBannerRef = useRef();
+
+  const handleBannerUpload = async (e) => {
     const image = e.target.files[0];
-    console.log(image);
+
+    if (image) {
+      const loadingToast = toast.loading("Uploading...");
+
+      try {
+        const url = await uploadImage(image);
+
+        if (url) {
+          toast.dismiss(loadingToast);
+          toast.success("Uploaded! 👍");
+          blogBannerRef.current.src = url;
+        }
+      } catch (err) {
+        toast.dismiss(loadingToast);
+        toast.error("Upload failed! Please try again.");
+      }
+    }
   };
 
   return (
@@ -23,12 +44,14 @@ const BlogEditor = () => {
         </div>
       </nav>
 
+      <Toaster />
+
       <AnimationWrapper>
         <section>
           <div className="mx-auto max-w-[900px] w-full">
             <div className="relative aspect-video hover:opacity-80 bg-white border-4 border-grey">
               <label htmlFor="uploadBanner">
-                <img src={blogBanner} className="z-20" />
+                <img ref={blogBannerRef} src={blogBanner} className="z-20" />
                 <input
                   id="uploadBanner"
                   type="file"
