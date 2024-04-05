@@ -1,12 +1,14 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Toaster, toast } from "react-hot-toast";
+import EditorJS from "@editorjs/editorjs";
 
 import logo from "../images/blongle-icon.png";
 import blogBanner from "../images/blog-banner.png";
 import AnimationWrapper from "../common/AnimationWrapper";
 import { uploadImage } from "../common/Aws";
 import { EditorContext } from "../pages/Editor";
+import { tools } from "./Tools";
 
 const BlogEditor = () => {
   const {
@@ -15,7 +17,14 @@ const BlogEditor = () => {
     setBlog,
   } = useContext(EditorContext);
 
-  console.log(blog);
+  useEffect(() => {
+    const editor = new EditorJS({
+      holder: "textEditor",
+      data: "",
+      tools: tools,
+      placeholder: "Let's write an awesome story",
+    });
+  }, []);
 
   const handleBannerUpload = async (e) => {
     const image = e.target.files[0];
@@ -92,6 +101,8 @@ const BlogEditor = () => {
             ></textarea>
 
             <hr className="w-full opacity-10 my-5" />
+
+            <div id="textEditor" className="font-gelasio"></div>
           </div>
         </section>
       </AnimationWrapper>
