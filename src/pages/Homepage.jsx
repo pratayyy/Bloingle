@@ -5,9 +5,11 @@ import AnimationWrapper from "../common/AnimationWrapper";
 import InPageNavigation from "../components/InPageNavigation";
 import Loader from "../components/Loader";
 import BlogCard from "../components/BlogCard";
+import TrendingBlogCard from "../components/TrendingBlogCard";
 
 const Homepage = () => {
   const [blogs, setBlogs] = useState(null);
+  const [trendingBlogs, setTrendingBlogs] = useState(null);
 
   const fetchLatestBlogs = async () => {
     try {
@@ -22,8 +24,24 @@ const Homepage = () => {
     }
   };
 
+  const fetchTrendingBlogs = async () => {
+    try {
+      const res = await axios({
+        method: "GET",
+        url:
+          import.meta.env.VITE_SERVER_DOMAIN +
+          "/api/v1/blogs/get-trending-blog",
+      });
+
+      setTrendingBlogs(res.data.blogs);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   useEffect(() => {
     fetchLatestBlogs();
+    fetchTrendingBlogs();
   }, []);
 
   return (
@@ -55,7 +73,20 @@ const Homepage = () => {
               )}
             </>
 
-            <h1>Trending blogs here</h1>
+            {trendingBlogs === null ? (
+              <Loader />
+            ) : (
+              trendingBlogs.map((blog, i) => {
+                return (
+                  <AnimationWrapper
+                    transition={{ duration: 1, delay: i * 0.1 }}
+                    key={i}
+                  >
+                    <TrendingBlogCard blog={blog} index={i} />
+                  </AnimationWrapper>
+                );
+              })
+            )}
           </InPageNavigation>
         </div>
 

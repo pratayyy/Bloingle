@@ -9,7 +9,7 @@ const BlogCard = ({ content, author }) => {
     tags,
     publishedAt,
     activity: { totalLikes },
-    blogId: _id,
+    _id,
     slug,
   } = content;
   const { name, username, photo } = author;
@@ -38,11 +38,16 @@ const BlogCard = ({ content, author }) => {
             <i className="fi fi-rr-heart text-xl" />
             {totalLikes}
           </span>
-          {tags.map((tag, i) => (
-            <span key={i} className="btn-light py-1 px-4">
-              {tag}
-            </span>
-          ))}
+
+          <span className="lg:hidden btn-light py-1 px-4">{tags[0]}</span>
+
+          <div className="hidden lg:flex flex-wrap">
+            {tags.map((tag, i) => (
+              <span key={i} className="btn-light py-1 px-4">
+                {tag}
+              </span>
+            ))}
+          </div>
         </div>
       </div>
 
