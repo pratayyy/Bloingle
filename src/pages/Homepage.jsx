@@ -4,6 +4,7 @@ import axios from "axios";
 import AnimationWrapper from "../common/AnimationWrapper";
 import InPageNavigation from "../components/InPageNavigation";
 import Loader from "../components/Loader";
+import BlogCard from "../components/BlogCard";
 
 const Homepage = () => {
   const [blogs, setBlogs] = useState(null);
@@ -39,7 +40,17 @@ const Homepage = () => {
                 <Loader />
               ) : (
                 blogs.map((blog, i) => {
-                  return <h1 key={i}>{blog.title}</h1>;
+                  return (
+                    <AnimationWrapper
+                      transition={{ duration: 1, delay: i * 0.1 }}
+                      key={i}
+                    >
+                      <BlogCard
+                        content={blog}
+                        author={blog.author.personalInfo}
+                      />
+                    </AnimationWrapper>
+                  );
                 })
               )}
             </>
