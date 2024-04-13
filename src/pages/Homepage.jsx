@@ -1,7 +1,30 @@
+import { useEffect, useState } from "react";
+import axios from "axios";
+
 import AnimationWrapper from "../common/AnimationWrapper";
 import InPageNavigation from "../components/InPageNavigation";
+import Loader from "../components/Loader";
 
 const Homepage = () => {
+  const [blogs, setBlogs] = useState(null);
+
+  const fetchLatestBlogs = async () => {
+    try {
+      const res = await axios({
+        method: "GET",
+        url: import.meta.env.VITE_SERVER_DOMAIN + "/api/v1/blogs",
+      });
+
+      setBlogs(res.data.blogs);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    fetchLatestBlogs();
+  }, []);
+
   return (
     <AnimationWrapper>
       <section className="h-cover flex justify-center gap-10">
@@ -11,7 +34,15 @@ const Homepage = () => {
             routes={["home", "trending blogs"]}
             defaultHidden={["trending blogs"]}
           >
-            <h1>Latest Blogs here</h1>
+            <>
+              {blogs === null ? (
+                <Loader />
+              ) : (
+                blogs.map((blog, i) => {
+                  return <h1 key={i}>{blog.title}</h1>;
+                })
+              )}
+            </>
 
             <h1>Trending blogs here</h1>
           </InPageNavigation>
