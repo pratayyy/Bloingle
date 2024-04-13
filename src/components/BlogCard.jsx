@@ -41,9 +41,9 @@ const BlogCard = ({ content, author }) => {
 
           <span className="lg:hidden btn-light py-1 px-4">{tags[0]}</span>
 
-          <div className="hidden lg:flex flex-wrap">
+          <div className="hidden lg:flex gap-2 flex-wrap overflow-hidden">
             {tags.map((tag, i) => (
-              <span key={i} className="btn-light py-1 px-4">
+              <span key={i} className="tag py-2 px-4">
                 {tag}
               </span>
             ))}
