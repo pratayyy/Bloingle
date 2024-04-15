@@ -6,6 +6,7 @@ import InPageNavigation, { activeTabRef } from "../components/InPageNavigation";
 import Loader from "../components/Loader";
 import BlogCard from "../components/BlogCard";
 import TrendingBlogCard from "../components/TrendingBlogCard";
+import NoData from "../components/NoData";
 
 const Homepage = () => {
   const [blogs, setBlogs] = useState(null);
@@ -103,7 +104,7 @@ const Homepage = () => {
             <>
               {blogs === null ? (
                 <Loader />
-              ) : (
+              ) : blogs.length ? (
                 blogs.map((blog, i) => {
                   return (
                     <AnimationWrapper
@@ -117,12 +118,14 @@ const Homepage = () => {
                     </AnimationWrapper>
                   );
                 })
+              ) : (
+                <NoData message="No blogs published" />
               )}
             </>
 
             {trendingBlogs === null ? (
               <Loader />
-            ) : (
+            ) : trendingBlogs.length ? (
               trendingBlogs.map((blog, i) => {
                 return (
                   <AnimationWrapper
@@ -133,6 +136,8 @@ const Homepage = () => {
                   </AnimationWrapper>
                 );
               })
+            ) : (
+              <NoData message="No trending blogs" />
             )}
           </InPageNavigation>
         </div>
@@ -170,7 +175,7 @@ const Homepage = () => {
 
               {trendingBlogs === null ? (
                 <Loader />
-              ) : (
+              ) : trendingBlogs.length ? (
                 trendingBlogs.map((blog, i) => {
                   return (
                     <AnimationWrapper
@@ -181,6 +186,8 @@ const Homepage = () => {
                     </AnimationWrapper>
                   );
                 })
+              ) : (
+                <NoData message="No trending blogs" />
               )}
             </div>
           </div>
