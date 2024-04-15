@@ -36,6 +36,24 @@ const Homepage = () => {
     }
   };
 
+  const fetchBlogsByCategory = async () => {
+    try {
+      const res = await axios({
+        method: "POST",
+        url:
+          import.meta.env.VITE_SERVER_DOMAIN +
+          "/api/v1/blogs/get-blog-by-category",
+        data: {
+          tag: pageState,
+        },
+      });
+
+      setBlogs(res.data.blogs);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const fetchTrendingBlogs = async () => {
     try {
       const res = await axios({
@@ -68,6 +86,8 @@ const Homepage = () => {
     activeTabRef.current.click();
 
     if (pageState === "home") fetchLatestBlogs();
+    else fetchBlogsByCategory();
+
     if (!trendingBlogs) fetchTrendingBlogs();
   }, [pageState]);
 
