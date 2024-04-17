@@ -2,10 +2,11 @@ import { createContext, useState, useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 
 import { lookInSession } from "./common/Session";
-import Authentication from "./pages/Authentication";
 import Editor from "./pages/Editor";
-import Homepage from "./pages/Homepage";
 import Navbar from "./components/Navbar";
+import Authentication from "./pages/Authentication";
+import Homepage from "./pages/Homepage";
+import Search from "./pages/Search";
 
 export const UserContext = createContext({});
 
@@ -27,6 +28,7 @@ const App = () => {
           <Route index element={<Homepage />} />
           <Route path="signup" element={<Authentication type="sign-up" />} />
           <Route path="login" element={<Authentication type="login" />} />
+          <Route path="/search/:query" element={<Search />} />
         </Route>
       </Routes>
     </UserContext.Provider>
