@@ -7,6 +7,7 @@ import Navbar from "./components/Navbar";
 import Authentication from "./pages/Authentication";
 import Homepage from "./pages/Homepage";
 import Search from "./pages/Search";
+import PageNotFound from "./pages/PageNotFound";
 
 export const UserContext = createContext({});
 
@@ -29,6 +30,7 @@ const App = () => {
           <Route path="signup" element={<Authentication type="sign-up" />} />
           <Route path="login" element={<Authentication type="login" />} />
           <Route path="/search/:query" element={<Search />} />
+          <Route path="*" element={<PageNotFound />} />
         </Route>
       </Routes>
     </UserContext.Provider>
