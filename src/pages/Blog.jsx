@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
 import AnimationWrapper from "../common/AnimationWrapper";
@@ -16,6 +16,8 @@ export const blogStructure = {
   banner: "",
   publishedAt: "",
 };
+
+export const BlogContext = createContext({});
 
 const Blog = () => {
   const { slug } = useParams();
@@ -59,36 +61,42 @@ const Blog = () => {
       {loading ? (
         <Loader />
       ) : (
-        <div className="max-w-[900px] center py-10 max-lg:px-[5vw] ">
-          <img src={banner} className="aspect-video" />
+        <BlogContext.Provider value={{ blog, setBlog }}>
+          <div className="max-w-[900px] center py-10 max-lg:px-[5vw] ">
+            <img src={banner} className="aspect-video" />
 
-          <div className="mt-12">
-            <h2>{title}</h2>
+            <div className="mt-12">
+              <h2>{title}</h2>
 
-            <div className="flex max-sm:flex-col justify-between my-8">
-              <div className="flex gap-5 items-start">
-                <img src={photo} className="w-12 h-12 rounded-full" />
+              <div className="flex max-sm:flex-col justify-between my-8">
+                <div className="flex gap-5 items-start">
+                  <img src={photo} className="w-12 h-12 rounded-full" />
 
-                <p>
-                  {name}
-                  <br />
-                  <Link
-                    to={`/user/${authorUsername}`}
-                    className="text-dark-grey"
-                  >
-                    @{authorUsername}
-                  </Link>
+                  <p>
+                    {name}
+                    <br />
+                    <Link
+                      to={`/user/${authorUsername}`}
+                      className="text-dark-grey"
+                    >
+                      @{authorUsername}
+                    </Link>
+                  </p>
+                </div>
+
+                <p className="text-dark-grey opacity-75 max-sm:mt-6 max-sm:ml-12 max-sm:pl-5">
+                  Published on {getDay(publishedAt)}
                 </p>
               </div>
-
-              <p className="text-dark-grey opacity-75 max-sm:mt-6 max-sm:ml-12 max-sm:pl-5">
-                Published on {getDay(publishedAt)}
-              </p>
             </div>
-          </div>
 
-          <BlogInteraction />
-        </div>
+            <BlogInteraction />
+
+            {/* Blog content  */}
+
+            <BlogInteraction />
+          </div>
+        </BlogContext.Provider>
       )}
     </AnimationWrapper>
   );
