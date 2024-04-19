@@ -9,6 +9,7 @@ import Homepage from "./pages/Homepage";
 import Search from "./pages/Search";
 import PageNotFound from "./pages/PageNotFound";
 import Profile from "./pages/Profile";
+import Blog from "./pages/Blog";
 
 export const UserContext = createContext({});
 
@@ -32,6 +33,7 @@ const App = () => {
           <Route path="login" element={<Authentication type="login" />} />
           <Route path="search/:query" element={<Search />} />
           <Route path="user/:id" element={<Profile />} />
+          <Route path="blog/:slug" element={<Blog />} />
           <Route path="*" element={<PageNotFound />} />
         </Route>
       </Routes>
