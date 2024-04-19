@@ -23,14 +23,14 @@ const Search = () => {
         method: "GET",
         url:
           import.meta.env.VITE_SERVER_DOMAIN +
-          `/api/v1/blogs/${query}?page=${page}`,
+          `/api/v1/blogs?page=${page}&fields=title,slug,banner,description,tags,activity,publishedAt&title=${query}`,
       });
 
       const formatedData = await filterPaginationData({
         prevDocs: blogs,
         newDocs: res.data.blogs,
         page,
-        countRoute: "/api/v1/blogs/get-blogs-count",
+        countRoute: "/api/v1/blogs/get-blogs-count?title=",
         param: `${query}`,
         createNewArray,
       });
@@ -47,7 +47,7 @@ const Search = () => {
         method: "GET",
         url:
           import.meta.env.VITE_SERVER_DOMAIN +
-          `/api/v1/users?personalInfo.username=${query}`,
+          `/api/v1/users?fields=personalInfo.name,personalInfo.username,personalInfo.photo&personalInfo.username=${query}`,
       });
 
       setUsers(res.data.users);

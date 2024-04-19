@@ -21,6 +21,7 @@ const Navbar = () => {
 
     if (e.keyCode === 13 && query.length) {
       navigate(`/search/${query}`);
+      e.target.value = null;
     }
   };
 

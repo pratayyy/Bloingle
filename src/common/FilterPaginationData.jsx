@@ -16,7 +16,7 @@ export const filterPaginationData = async ({
     } else {
       const res = await axios({
         method: "GET",
-        url: import.meta.env.VITE_SERVER_DOMAIN + countRoute + `/${param}`,
+        url: import.meta.env.VITE_SERVER_DOMAIN + countRoute + param,
       });
       const { totalDocs } = res.data;
       obj = { results: newDocs, page: 1, totalDocs };

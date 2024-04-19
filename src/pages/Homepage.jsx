@@ -30,7 +30,9 @@ const Homepage = () => {
     try {
       const res = await axios({
         method: "GET",
-        url: import.meta.env.VITE_SERVER_DOMAIN + `/api/v1/blogs?page=${page}`,
+        url:
+          import.meta.env.VITE_SERVER_DOMAIN +
+          `/api/v1/blogs?page=${page}&fields=title,slug,banner,description,tags,activity,publishedAt`,
       });
 
       const formatedData = await filterPaginationData({
@@ -52,14 +54,14 @@ const Homepage = () => {
         method: "GET",
         url:
           import.meta.env.VITE_SERVER_DOMAIN +
-          `/api/v1/blogs/${pageState}?page=${page}`,
+          `/api/v1/blogs?page=${page}&fields=title,slug,banner,description,tags,activity,publishedAt&tags=${pageState}`,
       });
 
       const formatedData = await filterPaginationData({
         prevDocs: blogs,
         newDocs: res.data.blogs,
         page,
-        countRoute: "/api/v1/blogs/get-blogs-count",
+        countRoute: "/api/v1/blogs/get-blogs-count?tags=",
         param: `${pageState}`,
       });
 
@@ -77,7 +79,7 @@ const Homepage = () => {
         method: "GET",
         url:
           import.meta.env.VITE_SERVER_DOMAIN +
-          "/api/v1/blogs/get-trending-blog",
+          "/api/v1/blogs?sort=-activity.totalLikes,-activity.totalReads,-publishedAt&fields=title,slug,publishedAt",
       });
 
       setTrendingBlogs(res.data.blogs);
