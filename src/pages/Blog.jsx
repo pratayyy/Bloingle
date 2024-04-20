@@ -7,6 +7,7 @@ import Loader from "../components/Loader";
 import { getDay } from "../common/Date";
 import BlogInteraction from "../components/BlogInteraction";
 import BlogCard from "../components/BlogCard";
+import BlogContent from "../components/BlogContent";
 
 export const blogStructure = {
   title: "",
@@ -119,7 +120,15 @@ const Blog = () => {
 
             <BlogInteraction />
 
-            {/* Blog content  */}
+            <div className="my-12 font-gelasio blog-page-content">
+              {content.blocks.map((block, i) => {
+                return (
+                  <div key={i} className="my-4 md:my-8">
+                    <BlogContent block={block} />
+                  </div>
+                );
+              })}
+            </div>
 
             <BlogInteraction />
 
