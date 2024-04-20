@@ -27,6 +27,7 @@ const App = () => {
     <UserContext.Provider value={{ user, setUser }}>
       <Routes>
         <Route path="/editor" element={<Editor />} />
+        <Route path="/editor/:slug" element={<Editor />} />
         <Route path="/" element={<Navbar />}>
           <Route index element={<Homepage />} />
           <Route path="signup" element={<Authentication type="sign-up" />} />

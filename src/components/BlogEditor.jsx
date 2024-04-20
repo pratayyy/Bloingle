@@ -1,5 +1,5 @@
 import { useContext, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { Toaster, toast } from "react-hot-toast";
 import axios from "axios";
 import EditorJS from "@editorjs/editorjs";
@@ -26,6 +26,8 @@ const BlogEditor = () => {
     user: { token },
   } = useContext(UserContext);
 
+  const { slug } = useParams();
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -33,7 +35,7 @@ const BlogEditor = () => {
       setTextEditor(
         new EditorJS({
           holder: "textEditor",
-          data: content,
+          data: Array.isArray(content) ? content[0] : content,
           tools: tools,
           placeholder: "Let's write an awesome story",
         })
@@ -121,7 +123,7 @@ const BlogEditor = () => {
         const res = await axios({
           method: "POST",
           url: import.meta.env.VITE_SERVER_DOMAIN + "/api/v1/blogs",
-          data: blogObj,
+          data: { ...blogObj, slug },
           headers: {
             "Authorization": `Bearer ${token}`,
           },

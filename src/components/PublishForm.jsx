@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Toaster, toast } from "react-hot-toast";
 import axios from "axios";
 
@@ -11,6 +11,8 @@ import Tag from "./Tag";
 const PublishForm = () => {
   const characterLimit = 200;
   const tagLimit = 10;
+
+  const { slug } = useParams();
 
   const {
     blog,
@@ -81,7 +83,7 @@ const PublishForm = () => {
       const res = await axios({
         method: "POST",
         url: import.meta.env.VITE_SERVER_DOMAIN + "/api/v1/blogs",
-        data: blogObj,
+        data: { ...blogObj, slug },
         headers: {
           "Authorization": `Bearer ${token}`,
         },
