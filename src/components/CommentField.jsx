@@ -7,7 +7,10 @@ import { BlogContext } from "../pages/Blog";
 
 const CommentField = ({ action }) => {
   const {
-    user: { token },
+    user: {
+      token,
+      data: { name, username, photo },
+    },
   } = useContext(UserContext);
 
   const {
@@ -18,6 +21,7 @@ const CommentField = ({ action }) => {
       activity,
       activity: { totalComments, totalParentComments },
       comments,
+      comments: { results: commentArr },
     },
     setBlog,
     setTotalParentCommentsLoaded,
@@ -45,11 +49,13 @@ const CommentField = ({ action }) => {
 
       setComment("");
 
+      data.comment.commentedBy = { personalInfo: { name, username, photo } };
+
       let newCommentArr;
 
       data.comment.childrenLevel = 0;
 
-      newCommentArr = [data];
+      newCommentArr = [data.comment, ...commentArr];
 
       const parentCommentIncrementValue = 1;
 
