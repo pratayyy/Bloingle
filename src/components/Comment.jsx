@@ -1,6 +1,44 @@
 import { useContext } from "react";
+import axios from "axios";
+
 import { BlogContext } from "../pages/Blog";
 import CommentField from "./CommentField";
+
+export const fetchComments = async ({
+  skip = 0,
+  blogId,
+  setParentCommentCountFunction,
+  commentArr = null,
+}) => {
+  let res;
+
+  try {
+    const { data } = await axios({
+      method: "GET",
+      url:
+        import.meta.env.VITE_SERVER_DOMAIN +
+        `/api/v1/comments/${blogId}?skip=${skip}&sort=-commentedAt`,
+    });
+
+    data.comments.map((comment) => {
+      comment.childrenLevel = 0;
+    });
+
+    setParentCommentCountFunction(
+      (previousValue) => previousValue + data.comments.length
+    );
+
+    if (commentArr === null) {
+      res = { results: data.comments };
+    } else {
+      res = { results: [...commentArr, ...data.comments] };
+    }
+  } catch (err) {
+    console.log(err);
+  }
+
+  return res;
+};
 
 const Comment = () => {
   const {

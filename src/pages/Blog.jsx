@@ -8,7 +8,7 @@ import { getDay } from "../common/Date";
 import BlogInteraction from "../components/BlogInteraction";
 import BlogCard from "../components/BlogCard";
 import BlogContent from "../components/BlogContent";
-import Comment from "../components/Comment";
+import Comment, { fetchComments } from "../components/Comment";
 
 export const blogStructure = {
   title: "",
@@ -53,8 +53,15 @@ const Blog = () => {
 
       const tag = res.data.blog.tags[0];
 
-      fetchSimilarBlogs({ tag, limit: 6 });
+      res.data.blog.comments = await fetchComments({
+        blogId: res.data.blog._id,
+        setParentCommentCountFunction: setTotalParentCommentsLoaded,
+      });
+
+      console.log("after", res.data.blog);
+
       setBlog(res.data.blog);
+      fetchSimilarBlogs({ tag, limit: 6 });
       setLoading(false);
     } catch (err) {
       console.log(err);

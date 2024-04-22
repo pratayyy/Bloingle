@@ -40,8 +40,6 @@ const CommentField = ({ action }) => {
         },
       });
 
-      console.log(data.comment);
-
       if (data.status === "success")
         toast.success(`${action[0].toUpperCase() + action.slice(1)} added`);
 
