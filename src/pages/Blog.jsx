@@ -8,6 +8,7 @@ import { getDay } from "../common/Date";
 import BlogInteraction from "../components/BlogInteraction";
 import BlogCard from "../components/BlogCard";
 import BlogContent from "../components/BlogContent";
+import Comment from "../components/Comment";
 
 export const blogStructure = {
   title: "",
@@ -28,6 +29,8 @@ const Blog = () => {
   const [similarBlogs, setSimilarBlogs] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isLikedByUser, setIsLikedByUser] = useState(false);
+  const [commentsWrapper, setCommentsWrapper] = useState(false);
+  const [totalParentCommentsLoaded, setTotalParentCommentsLoaded] = useState(0);
 
   const {
     title,
@@ -83,6 +86,9 @@ const Blog = () => {
     setBlog(blogStructure);
     setSimilarBlogs(null);
     setLoading(true);
+    setIsLikedByUser(false);
+    setCommentsWrapper(false);
+    setTotalParentCommentsLoaded(0);
   };
 
   return (
@@ -91,8 +97,19 @@ const Blog = () => {
         <Loader />
       ) : (
         <BlogContext.Provider
-          value={{ blog, setBlog, isLikedByUser, setIsLikedByUser }}
+          value={{
+            blog,
+            setBlog,
+            isLikedByUser,
+            setIsLikedByUser,
+            commentsWrapper,
+            setCommentsWrapper,
+            totalParentCommentsLoaded,
+            setTotalParentCommentsLoaded,
+          }}
         >
+          <Comment />
+
           <div className="max-w-[900px] center py-10 max-lg:px-[5vw] ">
             <img src={banner} className="aspect-video" />
 
