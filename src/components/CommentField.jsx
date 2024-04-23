@@ -12,10 +12,7 @@ const CommentField = ({
   setIsReplying,
 }) => {
   const {
-    user: {
-      token,
-      data: { name, username, photo },
-    },
+    user: { token },
   } = useContext(UserContext);
 
   const {
@@ -54,8 +51,6 @@ const CommentField = ({
         toast.success(`${action[0].toUpperCase() + action.slice(1)} added`);
 
       setComment("");
-
-      data.comment.commentedBy = { personalInfo: { name, username, photo } };
 
       let newCommentArr;
 

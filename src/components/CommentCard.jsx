@@ -9,10 +9,7 @@ import { BlogContext } from "../pages/Blog";
 
 const CommentCard = ({ index, leftValue, commentData }) => {
   const {
-    user: {
-      token,
-      data: { username },
-    },
+    user: { token, data },
   } = useContext(UserContext);
 
   const {
@@ -193,8 +190,8 @@ const CommentCard = ({ index, leftValue, commentData }) => {
             Reply
           </button>
 
-          {username === commentedByUsername ||
-          username === blogAuthorUsername ? (
+          {data?.username === commentedByUsername ||
+          data?.username === blogAuthorUsername ? (
             <button
               className="p-2 px-3 rounded-md border border-grey ml-auto hover:bg-red/30 hover:text-red flex items-center"
               onClick={deleteComment}
