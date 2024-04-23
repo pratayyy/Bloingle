@@ -98,8 +98,8 @@ const CommentCard = ({ index, leftValue, commentData }) => {
     });
   };
 
-  const loadReplies = async ({ skip = 0 }) => {
-    if (children.length) {
+  const loadReplies = async ({ skip = 0, currentIndex = index }) => {
+    if (commentArr[currentIndex].children.length) {
       hideReplies();
 
       try {
@@ -107,14 +107,14 @@ const CommentCard = ({ index, leftValue, commentData }) => {
           method: "GET",
           url:
             import.meta.env.VITE_SERVER_DOMAIN +
-            `/api/v1/comments/${_id}?skip=${skip}`,
+            `/api/v1/comments/${commentArr[currentIndex]._id}?skip=${skip}`,
         });
 
-        commentData.isReplyLoaded = true;
+        commentArr[currentIndex].isReplyLoaded = true;
 
         data.replies.forEach((reply, i) => {
-          reply.childrenLevel = commentData.childrenLevel + 1;
-          commentArr.splice(index + 1 + i + skip, 0, reply);
+          reply.childrenLevel = commentArr[currentIndex].childrenLevel + 1;
+          commentArr.splice(currentIndex + 1 + i + skip, 0, reply);
         });
 
         setBlog({ ...blog, comments: { ...comments, results: commentArr } });
@@ -153,6 +153,40 @@ const CommentCard = ({ index, leftValue, commentData }) => {
   const handleReplyClick = () => {
     if (!token) toast.error("Your are not logged in! Login to add reply");
     setIsReplying((previousValue) => !previousValue);
+  };
+
+  const LoadMoreRepliesButton = () => {
+    const parentIndex = getParentIndex();
+
+    const button = (
+      <button
+        onClick={() =>
+          loadReplies({
+            skip: index - parentIndex,
+            currentIndex: parentIndex,
+          })
+        }
+        className="text-dark-grey p-2 px-3 hover:bg-grey/30 rounded-md flex items-center gap-2"
+      >
+        Load More Replies
+      </button>
+    );
+
+    if (commentArr[index + 1]) {
+      if (
+        commentArr[index + 1].childrenLevel < commentArr[index].childrenLevel
+      ) {
+        if (index - parentIndex < commentArr[parentIndex].children.length) {
+          return button;
+        }
+      }
+    } else {
+      if (parentIndex) {
+        if (index - parentIndex < commentArr[parentIndex].children.length) {
+          return button;
+        }
+      }
+    }
   };
 
   return (
@@ -216,6 +250,8 @@ const CommentCard = ({ index, leftValue, commentData }) => {
           ""
         )}
       </div>
+
+      <LoadMoreRepliesButton />
     </div>
   );
 };
