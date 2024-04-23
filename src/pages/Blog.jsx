@@ -58,8 +58,6 @@ const Blog = () => {
         setParentCommentCountFunction: setTotalParentCommentsLoaded,
       });
 
-      console.log(res.data.blog);
-
       setBlog(res.data.blog);
       fetchSimilarBlogs({ tag, limit: 6 });
       setLoading(false);
