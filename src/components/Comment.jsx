@@ -20,7 +20,7 @@ export const fetchComments = async ({
       method: "GET",
       url:
         import.meta.env.VITE_SERVER_DOMAIN +
-        `/api/v1/comments/${blogId}?skip=${skip}&sort=-commentedAt`,
+        `/api/v1/blogs/${blogId}/comments?skip=${skip}&sort=-commentedAt`,
     });
 
     data.comments.map((comment) => {
