@@ -102,10 +102,74 @@ const EditProfile = () => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const form = new FormData();
+    const form = new FormData(editProfileForm.current);
+    let formData = {};
+
+    for (const [key, value] of form.entries()) {
+      formData[key] = value;
+    }
+
+    const {
+      username,
+      bio,
+      youtube,
+      facebook,
+      twitter,
+      github,
+      instagram,
+      website,
+    } = formData;
+
+    const loadingToast = toast.loading("Updating...");
+    e.target.setAttribute("disabled", true);
+
+    try {
+      const res = axios({
+        method: "PATCH",
+        url: import.meta.env.VITE_SERVER_DOMAIN + "/api/v1/users/updateMe",
+        data: {
+          username,
+          bio,
+          socialLinks: {
+            youtube,
+            facebook,
+            twitter,
+            github,
+            instagram,
+            website,
+          },
+        },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (user.data.username === res.data.updatedUser.profileInfo.username) {
+        const newUser = {
+          ...user,
+          data: {
+            ...user.data,
+            username: res.data.updatedUser.profileInfo.username,
+          },
+        };
+
+        storeInSession("user", JSON.stringify(newUser));
+        setUser(newUser);
+
+        toast.dismiss(loadingToast);
+        e.target.removeAttribute("disabled");
+
+        toast.success("Profile updated successfully!");
+      }
+    } catch (err) {
+      toast.dismiss(loadingToast);
+      e.target.removeAttribute("disabled");
+
+      toast.error(err.response.data.message);
+    }
   };
 
   useEffect(() => {
