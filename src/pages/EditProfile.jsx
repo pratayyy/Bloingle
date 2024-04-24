@@ -127,7 +127,7 @@ const EditProfile = () => {
     e.target.setAttribute("disabled", true);
 
     try {
-      const res = axios({
+      const res = await axios({
         method: "PATCH",
         url: import.meta.env.VITE_SERVER_DOMAIN + "/api/v1/users/updateMe",
         data: {

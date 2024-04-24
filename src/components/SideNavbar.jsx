@@ -5,7 +5,7 @@ import { UserContext } from "../App";
 
 const SideNavbar = () => {
   const {
-    user: { token },
+    user: { token, newNotificationAvailable },
   } = useContext(UserContext);
 
   const page = location.pathname.split("/")[2];
@@ -93,7 +93,15 @@ const SideNavbar = () => {
               }}
               className="sidebar-link"
             >
-              <i className="fi fi-rr-bell"></i>Notification
+              <div className="relative">
+                <i className="fi fi-rr-bell"></i>
+                {newNotificationAvailable ? (
+                  <span className="bg-red w-2 h-2 rounded-full absolute z-10 top-0 right-0"></span>
+                ) : (
+                  ""
+                )}
+              </div>
+              Notification
             </NavLink>
 
             <NavLink

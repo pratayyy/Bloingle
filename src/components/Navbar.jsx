@@ -1,5 +1,6 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { Link, Outlet, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 import logo from "../images/blongle-icon.png";
 import { UserContext } from "../App";
@@ -13,8 +14,30 @@ const Navbar = () => {
 
   const {
     user,
-    user: { token, data },
+    user: { token, data, newNotificationAvailable },
+    setUser,
   } = useContext(UserContext);
+
+  useEffect(() => {
+    if (token) {
+      axios
+        .get(
+          import.meta.env.VITE_SERVER_DOMAIN +
+            "/api/v1/notifications/get-new-notification",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
+        .then(({ data }) => {
+          setUser({ ...user, ...data });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }, [token]);
 
   const handleSearch = (e) => {
     const query = e.target.value;
@@ -67,7 +90,12 @@ const Navbar = () => {
             <>
               <Link to="/dashboard/notification">
                 <button className="w-12 h-12 rounded-full bg-grey relative hover:bg-black/10">
-                  <i className="fi fi-rr-bell text-2l block mt-1"></i>
+                  <i className="fi fi-rr-bell text-2xl block mt-1"></i>
+                  {newNotificationAvailable ? (
+                    <span className="bg-red w-3 h-3 rounded-full absolute z-10 top-2 right-2"></span>
+                  ) : (
+                    ""
+                  )}
                 </button>
               </Link>
 
