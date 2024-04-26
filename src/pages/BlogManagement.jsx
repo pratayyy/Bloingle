@@ -43,8 +43,6 @@ const BlogManagement = () => {
         countRoute: `/api/v1/blogs/get-blogs-count/auth?draft=${draft}&title=${query}`,
       });
 
-      console.log(formattedData);
-
       if (draft) setDrafts(formattedData);
       else setBlogs(formattedData);
     } catch (err) {
