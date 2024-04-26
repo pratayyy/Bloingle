@@ -101,7 +101,7 @@ const SideNavbar = () => {
                   ""
                 )}
               </div>
-              Notification
+              Notifications
             </NavLink>
 
             <NavLink

@@ -7,9 +7,14 @@ export const filterPaginationData = async ({
   page,
   countRoute,
   param = "",
+  user = undefined,
 }) => {
   try {
     let obj;
+
+    let headers = {};
+
+    if (user) headers = { Authorization: `Bearer ${user}` };
 
     if (prevDocs !== null && !createNewArray) {
       obj = { ...prevDocs, results: [...prevDocs.results, ...newDocs], page };
@@ -17,6 +22,7 @@ export const filterPaginationData = async ({
       const res = await axios({
         method: "GET",
         url: import.meta.env.VITE_SERVER_DOMAIN + countRoute + param,
+        headers,
       });
       const { totalDocs } = res.data;
       obj = { results: newDocs, page: 1, totalDocs };
