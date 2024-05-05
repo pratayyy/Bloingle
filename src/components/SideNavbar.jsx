@@ -105,7 +105,7 @@ const SideNavbar = () => {
             </NavLink>
 
             <NavLink
-              to="/dashboard/editor"
+              to="/editor"
               onClick={(e) => {
                 setPageState(e.target.innerText);
               }}
